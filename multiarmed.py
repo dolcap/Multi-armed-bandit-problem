@@ -12,7 +12,7 @@ class Bandit:
         return 1 if selector <= self.pay_offs[action] else 0
 
 
-def explore_greedy_agent(bandit, iterations, initial_rounds=10, random_agent=False):
+def explore_greedy_agent(bandit, iterations, initial_rounds=10):
     
     pay_offs = dict()
     best_action = -1
@@ -54,7 +54,21 @@ def explore_greedy_agent(bandit, iterations, initial_rounds=10, random_agent=Fal
 
 def random_agent(bandit, iterations):
 
-    return explore_greedy_agent(bandit, iterations, random_agent=True)
+    pay_offs = dict()
+    actions = []
+    rewards = []
+
+    for t in range(iterations):
+        a=random.choice(bandit.actions)# for the initial rounds pick a random action
+        r=bandit.sample(a)
+        if a in pay_offs:
+            pay_offs[a].append(r)
+        else:
+            pay_offs[a] = [r]
+        actions.append(a) #adding actions and rewards in lists
+        rewards.append(r)    
+
+    return actions, rewards
     
 
 def epsilon_greedy_agent(bandit, iterations, epsilon=0.2,
